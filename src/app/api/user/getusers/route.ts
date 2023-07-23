@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const response = NextResponse.json(
       {
-        data: users,
+        users,
         success: true,
       }
     )
