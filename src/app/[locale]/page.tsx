@@ -1,3 +1,4 @@
+'use client';
 import TopNavigation from '@/components/topNavigation'
 import { Skeleton } from 'antd'
 

@@ -3,12 +3,12 @@ import type { NextRequest } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
-const locales = ['en-US', 'nl-NL', 'nl']
+const locales = ['en','nl'];
 
 function getLocale() {
   let headers = { 'accept-language': 'en-US,en;q=0.5' }
   let languages = new Negotiator({ headers }).languages()
-  let defaultLocale = 'en-US'
+  let defaultLocale = 'en'
 
   return match(languages, locales, defaultLocale) // -> 'en-US'
 }
@@ -17,8 +17,8 @@ import createMiddleware from 'next-intl/middleware';
 
 export default createMiddleware({
   // A list of all locales that are supported
-  locales: ['en', 'nl'],
-
+  locales,
+ 
   // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
   defaultLocale: 'en'
 });
@@ -31,19 +31,27 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value || '';
 
   // Check if there is any supported locale in the pathname
-  // const pathname = request.nextUrl.pathname
-  // const pathnameIsMissingLocale = locales.every(
-  //   (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-  // )
+  const pathname = request.nextUrl.pathname
+  const pathnameIsMissingLocale = locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  )
 
-  // const locale = getLocale();
+  const locale = getLocale();
 
   if (isPublicPath && token) {
-    return NextResponse.redirect(new URL(`/`, request.nextUrl));
+    if (pathnameIsMissingLocale) {
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.nextUrl));
+    }
   }
 
   if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL(`/login`, request.nextUrl));
+    if (pathnameIsMissingLocale) {
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl));
+    }
+  }
+
+  if (pathnameIsMissingLocale) {
+    return NextResponse.redirect(new URL(`/en/${pathname}`, request.nextUrl));
   }
 }
 
@@ -55,6 +63,7 @@ export const config = {
     '/login',
     '/resources',
     '/signup',
-    '/((?!api|_next|.*\\..*).*)',
+    // '/((?!api|_next|.*\\..*).*)',
+    '/((?!api|_next/static|_next/image|!favicon.ico).*)',
   ]
 }

@@ -1,11 +1,11 @@
 'use client';
 import axios from 'axios';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Input, Spin, notification } from 'antd';
 import { useRouter } from "next/navigation";
 import { UserOutlined } from '@ant-design/icons';
 import styles from "@/app/[locale]/login/login.module.css";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 const Login = () => {
   console.log("v1.0.0");

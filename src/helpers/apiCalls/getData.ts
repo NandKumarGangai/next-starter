@@ -1,5 +1,3 @@
-
-
 // If u define this function inside component you won't need to mention host name
 // As it is defined outside you must provide hostname.
 // Change the host based env i.e. localhost or deployed env
