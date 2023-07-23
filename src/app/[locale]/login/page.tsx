@@ -8,7 +8,7 @@ import styles from "@/app/[locale]/login/login.module.css";
 import {useTranslations} from 'next-intl';
 
 const Login = () => {
-
+  console.log("v1.0.0");
   const t = useTranslations('loginPage');
 
   const router = useRouter();

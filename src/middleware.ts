@@ -18,38 +18,34 @@ import createMiddleware from 'next-intl/middleware';
 export default createMiddleware({
   // A list of all locales that are supported
   locales: ['en', 'nl'],
- 
+
   // If this locale is matched, pathnames work without a prefix (e.g. `/about`)
   defaultLocale: 'en'
 });
 
-// export function middleware(request: NextRequest) {
-//   const path = request.nextUrl.pathname;
+export function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
 
-//   const isPublicPath = path.includes('/login');
+  const isPublicPath = path.includes('/login');
 
-//   const token = request.cookies.get('token')?.value || '';
+  const token = request.cookies.get('token')?.value || '';
 
-//   // Check if there is any supported locale in the pathname
-//   const pathname = request.nextUrl.pathname
-//   const pathnameIsMissingLocale = locales.every(
-//     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-//   )
+  // Check if there is any supported locale in the pathname
+  // const pathname = request.nextUrl.pathname
+  // const pathnameIsMissingLocale = locales.every(
+  //   (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  // )
 
-//   const locale = getLocale();
+  // const locale = getLocale();
 
-//   if (isPublicPath && token) {
-//     if (pathnameIsMissingLocale) {
-//       return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.nextUrl));
-//     }
-//   }
+  if (isPublicPath && token) {
+    return NextResponse.redirect(new URL(`/`, request.nextUrl));
+  }
 
-//   if (!isPublicPath && !token) {
-//     if (pathnameIsMissingLocale) {
-//       return NextResponse.redirect(new URL(`/${locale}/login`, request.nextUrl));
-//     }
-//   }
-// }
+  if (!isPublicPath && !token) {
+    return NextResponse.redirect(new URL(`/login`, request.nextUrl));
+  }
+}
 
 // See "Matching Paths" below to learn more
 export const config = {
