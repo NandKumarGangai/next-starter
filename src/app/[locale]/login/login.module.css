@@ -1,0 +1,7 @@
+.root {
+  @apply min-h-screen h-full w-full flex items-center justify-center flex-col gap-4;
+}
+
+.userIcon{
+  @apply h-8 w-80;
+}
